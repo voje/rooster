@@ -7,7 +7,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.media.MediaPlayer
-import android.os.Build
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -15,18 +14,15 @@ import android.util.Log
 import android.widget.Button
 import android.widget.TimePicker
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import com.google.android.material.timepicker.TimeFormat
-import java.lang.Math.abs
 import java.text.DateFormat
-import java.time.format.DateTimeFormatter
 import java.util.*
 
 /*
     Hard-coded snooze guard.
     Users can't set next alarm inside the defined interval.
  */
-const val SNOOZE_GUARD_MIN = 1
+const val SNOOZE_GUARD_MIN = 240
 const val MINUTES_IN_DAY = 24 * 60
 
 lateinit var mediaPlayer : MediaPlayer
@@ -59,8 +55,7 @@ class MainActivity : AppCompatActivity(), TimePickerDialog.OnTimeSetListener {
         val formatted = DateFormat.getTimeInstance(TimeFormat.CLOCK_24H).format(cal.time);
         val msg = "Alarm armed for $formatted"
         Log.d("Rooster", msg)
-        val toast = Toast.makeText(ctx, msg, Toast.LENGTH_SHORT)
-        toast.show()
+        Toast.makeText(ctx, msg, Toast.LENGTH_LONG).show()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -87,7 +82,7 @@ class MainActivity : AppCompatActivity(), TimePickerDialog.OnTimeSetListener {
             Log.d("Rooster", "Disable alarm")
             mediaPlayer.pause()
             mediaPlayer.seekTo(0)
-            Toast.makeText(this, "Alarm disabled", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Alarm disabled", Toast.LENGTH_LONG).show()
             /*
             TODO("We're just stopping the MediaPlayer; need a way to actually disable the alarm")
              */
@@ -106,10 +101,9 @@ class MainActivity : AppCompatActivity(), TimePickerDialog.OnTimeSetListener {
             val diffInMillis = (diffInMin * 60 * 1000).toLong()
             setAlarm(this, diffInMillis)
         } else {
-            Log.d(
-                    "Rooster",
-                    "Can't set alarm; pick an interval larger than $SNOOZE_GUARD_MIN minutes"
-            )
+            val msg = "Can't set alarm; pick an interval larger than $SNOOZE_GUARD_MIN minutes"
+            Log.d("Rooster", msg)
+            Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
         }
     }
 }
