@@ -13,5 +13,4 @@
 .externalNativeBuild
 .cxx
 local.properties
-/app/src/main/java/dev/voje/rooster/MainActivity.kt
 /app/src/main/res/raw/igorrr_chicken_sonata.mp3
